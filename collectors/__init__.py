@@ -1,0 +1,1 @@
+"""Public transparency collectors."""

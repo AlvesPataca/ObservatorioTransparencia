@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Observatório Ceres-Rialma</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#dashboard" aria-label="Observatório Ceres-Rialma">
+        <span class="brand-mark">OC</span>
+        <span>
+          <strong>Observatório</strong>
+          <small>Ceres · Rialma</small>
+        </span>
+      </a>
+      <nav class="topbar-nav" id="topbar-nav" aria-label="Navegação principal">
+        <a class="nav-tab active" href="#dashboard" id="nav-dashboard" data-tab="dashboard">Dashboard</a>
+        <a class="nav-tab" href="#records" id="nav-records" data-tab="records">Registros</a>
+        <a class="nav-tab" href="#attention" id="nav-attention" data-tab="attention">Pontos de Revisão</a>
+        <a class="nav-tab" href="#suppliers" id="nav-suppliers" data-tab="suppliers">Fornecedores</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <!-- VIEW 1: DASHBOARD -->
+    <section id="view-dashboard" class="tab-view active">
+      <div class="view-header">
+        <p class="eyebrow">Painel de acompanhamento orçamentário</p>
+        <h1>Observatório Ceres e Rialma</h1>
+        <p class="intro-copy">Acompanhamento consolidado de despesas públicas, licitações e contratos das prefeituras municipais.</p>
+      </div>
+
+      <!-- Filtros do Dashboard -->
+      <div class="tab-filter-bar" id="dashboard-filter-bar">
+        <div class="filter-group">
+          <label for="dash-municipality">Município</label>
+          <select id="dash-municipality">
+            <option value="">Todos (Ceres e Rialma)</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="dash-year">Ano</label>
+          <select id="dash-year">
+            <option value="">Todos os anos</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="dash-kind">Tipo</label>
+          <select id="dash-kind">
+            <option value="">Todos os tipos</option>
+            <option value="despesa">Despesas</option>
+            <option value="licitacao">Licitações</option>
+            <option value="contrato">Contratos</option>
+          </select>
+        </div>
+        <div class="filter-actions">
+          <button class="clear-button" id="dash-clear" type="button" title="Limpar filtros">Limpar</button>
+          <button class="refresh-button" id="dash-refresh" type="button" title="Atualizar dados">
+            <span aria-hidden="true">↻</span> Atualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Cards de Resumo Consolidado -->
+      <section class="summary-grid" id="summary-cards" aria-label="Resumo dos registros">
+        <article class="summary-card loading-card"><span class="card-label">Carregando resumo</span><strong>...</strong></article>
+      </section>
+
+      <!-- Resumo Top Favorecidos no Dashboard -->
+      <section class="workspace-panel favored-panel" id="dashboard-favored-section">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Análise de fornecedores</p>
+            <h2>Despesas por favorecido (Top 10)</h2>
+          </div>
+          <a class="section-link-action" href="#suppliers" title="Ver ranking completo de fornecedores">Ver todos os fornecedores →</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Favorecido / Fornecedor</th>
+                <th>Município</th>
+                <th>Ano</th>
+                <th class="th-num">Movimentos</th>
+                <th class="th-num">Total Empenhado</th>
+                <th class="th-num">Total Liquidado</th>
+                <th class="th-num">Total Pago</th>
+              </tr>
+            </thead>
+            <tbody id="favored-body">
+              <tr><td class="empty-state" colspan="7">Carregando dados de favorecidos...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Seção Alternativa para Licitações e Contratos no Dashboard -->
+      <section class="workspace-panel" id="dashboard-kind-section" style="display: none;">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow" id="dash-kind-eyebrow">Processos licitatórios</p>
+            <h2 id="dash-kind-title">Licitações coletadas</h2>
+          </div>
+          <a class="section-link-action" id="dash-kind-cta" href="#records" title="Ver registros na aba Registros">Ver todos os registros na aba Registros →</a>
+        </div>
+        <div id="dash-kind-content">
+          <!-- Conteúdo dinâmico: prévia ou empty state elegante -->
+        </div>
+      </section>
+    </section>
+
+    <!-- VIEW 2: REGISTROS PÚBLICOS -->
+    <section id="view-records" class="tab-view" style="display: none;">
+      <div class="view-header">
+        <p class="eyebrow">Consulta detalhada</p>
+        <h1>Registros Públicos</h1>
+        <p class="intro-copy">Pesquisa integral e auditoria de movimentações fiscais, processos licitatórios e contratos.</p>
+      </div>
+
+      <!-- Filtros de Registros -->
+      <div class="tab-filter-bar" id="records-filter-bar">
+        <div class="filter-group">
+          <label for="records-municipality">Município</label>
+          <select id="records-municipality">
+            <option value="">Todos (Ceres e Rialma)</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="records-year">Ano</label>
+          <select id="records-year">
+            <option value="">Todos os anos</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="records-kind">Tipo</label>
+          <select id="records-kind">
+            <option value="">Todos os tipos</option>
+            <option value="despesa">Despesas</option>
+            <option value="licitacao">Licitações</option>
+            <option value="contrato">Contratos</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="records-status">Status</label>
+          <input id="records-status" type="search" placeholder="Ex.: Aberta, Pago...">
+        </div>
+        <div class="filter-group search-group">
+          <label for="records-query">Busca textual</label>
+          <div class="search-input-wrapper">
+            <input id="records-query" type="search" placeholder="Título, credor, objeto ou descrição...">
+            <span class="search-spinner" id="records-spinner" style="display: none;">⟳</span>
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button class="clear-button" id="records-clear" type="button" title="Limpar filtros">Limpar</button>
+          <button class="refresh-button" id="records-refresh" type="button" title="Atualizar registros">
+            <span aria-hidden="true">↻</span> Atualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabela de Registros -->
+      <section class="workspace-panel">
+        <div class="table-meta-bar">
+          <span class="result-count" id="records-count">0 registros encontrados</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead id="records-table-headers">
+              <tr>
+                <th>Município</th>
+                <th>Ano</th>
+                <th>Tipo</th>
+                <th>Favorecido / Título</th>
+                <th>Data</th>
+                <th class="th-num">Valor Financeiro</th>
+                <th class="link-column">Fonte</th>
+              </tr>
+            </thead>
+            <tbody id="records-body">
+              <tr><td class="empty-state" colspan="7">Carregando registros...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination-bar" id="records-pagination">
+          <span class="pagination-info" id="records-pagination-info">Mostrando 0 de 0</span>
+          <div class="pagination-controls">
+            <button type="button" class="btn-page" id="records-btn-prev" disabled>← Anterior</button>
+            <span class="page-indicator" id="records-page-indicator">Página 1</span>
+            <button type="button" class="btn-page" id="records-btn-next" disabled>Próxima →</button>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- VIEW 3: PONTOS DE REVISÃO -->
+    <section id="view-attention" class="tab-view" style="display: none;">
+      <div class="view-header">
+        <p class="eyebrow">Motor analítico auditável</p>
+        <h1>Pontos de Revisão e Anomalias Estatísticas</h1>
+        <p class="intro-copy">Identificação de outliers estatísticos (IQR), concentrações orçamentárias e inconsistências contábeis com justificativas técnicas auditáveis e linguagem neutra.</p>
+      </div>
+
+      <!-- Filtros de Pontos de Revisão -->
+      <div class="tab-filter-bar" id="attention-filter-bar">
+        <div class="filter-group">
+          <label for="att-municipality">Município</label>
+          <select id="att-municipality">
+            <option value="">Todos (Ceres e Rialma)</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="att-year">Ano</label>
+          <select id="att-year">
+            <option value="">Todos os anos</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="att-category">Categoria</label>
+          <select id="att-category">
+            <option value="">Todas as categorias</option>
+            <option value="value_outlier">Outlier de Valor (IQR)</option>
+            <option value="supplier_concentration">Concentração em Fornecedor</option>
+            <option value="recurring_payments">Pagamentos Recorrentes / Valores Repetidos</option>
+            <option value="payment_flow_inconsistency">Divergência Contábil (Fluxo Pago/Empenhado)</option>
+            <option value="possible_fragmentation">Possível Agrupamento de Despesas</option>
+            <option value="repeated_description">Descrições Padronizadas e Repetitivas</option>
+            <option value="new_supplier_high_value">Fornecedor Novo com Valor Expressivo</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="att-severity">Severidade</label>
+          <select id="att-severity">
+            <option value="">Todas as severidades</option>
+            <option value="alta">Alta</option>
+            <option value="media">Média</option>
+            <option value="baixa">Baixa</option>
+          </select>
+        </div>
+        <div class="filter-group search-group">
+          <label for="att-query">Busca contextual</label>
+          <div class="search-input-wrapper">
+            <input id="att-query" type="search" placeholder="Fornecedor, título ou justificativa...">
+            <span class="search-spinner" id="att-spinner" style="display: none;">⟳</span>
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button class="clear-button" id="att-clear" type="button" title="Limpar filtros">Limpar</button>
+          <button class="refresh-button" id="att-refresh" type="button" title="Atualizar pontos">
+            <span aria-hidden="true">↻</span> Atualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabela de Pontos de Revisão -->
+      <section class="workspace-panel attention-panel-view">
+        <div class="table-meta-bar">
+          <span class="result-count" id="att-count">0 pontos de revisão</span>
+          <span class="section-note">Análise quantitativa e estatística — requer verificação documental sem juízo acusatório</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Município</th>
+                <th>Ano</th>
+                <th>Categoria</th>
+                <th class="th-num">Severidade</th>
+                <th>Favorecido / Identificador</th>
+                <th>Explicação Técnica e Evidências</th>
+                <th class="th-num">Valor</th>
+                <th class="link-column">Fonte</th>
+              </tr>
+            </thead>
+            <tbody id="attention-body">
+              <tr><td class="empty-state" colspan="8">Carregando pontos de revisão...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination-bar" id="attention-pagination">
+          <span class="pagination-info" id="att-pagination-info">Mostrando 0 de 0</span>
+          <div class="pagination-controls">
+            <button type="button" class="btn-page" id="att-btn-prev" disabled>← Anterior</button>
+            <span class="page-indicator" id="att-page-indicator">Página 1</span>
+            <button type="button" class="btn-page" id="att-btn-next" disabled>Próxima →</button>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- VIEW 4: FORNECEDORES -->
+    <section id="view-suppliers" class="tab-view" style="display: none;">
+      <div class="view-header">
+        <p class="eyebrow">Execução e concentração orçamentária</p>
+        <h1>Fornecedores e Favorecidos</h1>
+        <p class="intro-copy">Análise detalhada de credores por volume financeiro empenhado, liquidado e pago.</p>
+      </div>
+
+      <!-- Filtros de Fornecedores -->
+      <div class="tab-filter-bar" id="suppliers-filter-bar">
+        <div class="filter-group">
+          <label for="supp-municipality">Município</label>
+          <select id="supp-municipality">
+            <option value="">Todos (Ceres e Rialma)</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="supp-year">Ano</label>
+          <select id="supp-year">
+            <option value="">Todos os anos</option>
+          </select>
+        </div>
+        <div class="filter-group search-group">
+          <label for="supp-query">Buscar favorecido / credor</label>
+          <div class="search-input-wrapper">
+            <input id="supp-query" type="search" placeholder="Nome ou razão social do fornecedor...">
+            <span class="search-spinner" id="supp-spinner" style="display: none;">⟳</span>
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button class="clear-button" id="supp-clear" type="button" title="Limpar filtros">Limpar</button>
+          <button class="refresh-button" id="supp-refresh" type="button" title="Atualizar fornecedores">
+            <span aria-hidden="true">↻</span> Atualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabela Completa de Fornecedores -->
+      <section class="workspace-panel favored-panel">
+        <div class="table-meta-bar">
+          <span class="result-count" id="supp-count">Fornecedores ordenados por volume empenhado</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Favorecido / Fornecedor</th>
+                <th>Município</th>
+                <th>Ano</th>
+                <th class="th-num">Movimentos</th>
+                <th class="th-num">Total Empenhado</th>
+                <th class="th-num">Total Liquidado</th>
+                <th class="th-num">Total Pago</th>
+              </tr>
+            </thead>
+            <tbody id="suppliers-body">
+              <tr><td class="empty-state" colspan="7">Carregando dados de fornecedores...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">Observatório Ceres-Rialma · dados públicos coletados dos portais municipais</footer>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
